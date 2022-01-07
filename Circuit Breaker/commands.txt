@@ -1,0 +1,3 @@
+# Fortio 
+export FORTIO_POD=$(kubectl get pods -l app=fortio -o 'jsonpath={.items[0].metadata.name}')
+kubectl exec "$FORTIO_POD" -c fortio -- fortio load -c 2 -qps 0 -n 100 -loglevel Warning http://service-service
