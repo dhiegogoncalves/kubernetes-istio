@@ -1,0 +1,25 @@
+# k3d
+
+k3d cluster create cluster-istio --servers-memory 8192MiB -p "8000:30000@loadbalancer" --agents 2 --agents-memory 8G
+
+# Kubernetes
+
+kubectl config use-context k3d-cluster-istio
+kubectl cluster-info
+kubectl get nodes
+kubectl apply -f deployment.yaml
+kubectl top node 
+
+# Istio
+istioctl install -y
+kubectl get ns
+kubectl get po -n istio-system
+kubectl get svc -n istio-system
+kubectl label namespace default istio-injection=enabled
+kubectl apply -f addons/prometheus.yaml
+kubectl apply -f addons/kiali.yaml
+istioctl dashboard kiali  
+
+# Fortio
+export FORTIO_POD=$(kubectl get pods -l app=fortio -o 'jsonpath={.items[0].metadata.name}')
+kubectl exec "$FORTIO_POD" -c fortio -- fortio load -c 2 -qps 0 -t 1200s -loglevel Warning http://nginx-service:8000
