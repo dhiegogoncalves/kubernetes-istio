@@ -1,0 +1,21 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: nginx-vs
+spec:
+  hosts:
+    - nginx-service
+  http:
+    - fault:
+        #delay:
+        #  fixedDelay: 10s
+        #  percentage:
+        #    value: 100
+        abort:
+          httpStatus: 500
+          percentage:
+            value: 100
+      route:
+        - destination:
+            host: nginx-service
+            subset: all
