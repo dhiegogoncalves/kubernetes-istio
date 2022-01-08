@@ -1,6 +1,6 @@
 # k3d
 
-k3d cluster create cluster-istio --servers-memory 8192MiB -p "8000:30000@loadbalancer" --agents 2 --agents-memory 8G
+k3d cluster create cluster-istio -p "8000:30000@loadbalancer" --agents 2
 
 # Kubernetes
 
